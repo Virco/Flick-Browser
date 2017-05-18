@@ -24,8 +24,8 @@ enum DownloadStatus {
     OK
 }
 
-public class GetRawDataAsyncTask extends AsyncTask<String, Void, String> {
-    private static final String TAG = "GetRawDataAsyncTask";
+public class GetRawData extends AsyncTask<String, Void, String> {
+    private static final String TAG = "GetRawData";
 
     private DownloadStatus mDownloadStatus;
     private final OnDownloadComplete mCallback;
@@ -34,18 +34,28 @@ public class GetRawDataAsyncTask extends AsyncTask<String, Void, String> {
         void onDownloadComplete(String data, DownloadStatus status);
     }
 
-    public GetRawDataAsyncTask(OnDownloadComplete callback) {
+    public GetRawData(OnDownloadComplete callback) {
         this.mDownloadStatus = DownloadStatus.IDLE;
         this.mCallback = callback;
     }
 
     @Override
     protected void onPostExecute(String s) {
-        Log.d(TAG, "onPostExecute: parameter = " + s);
+//        Log.d(TAG, "onPostExecute: parameter = " + s);
         if (mCallback != null) {
             mCallback.onDownloadComplete(s, mDownloadStatus);
         }
         Log.d(TAG, "onPostExecute: ends");
+    }
+
+    void runInSameThread(String s) {
+        Log.d(TAG, "runInSameThread: starts");
+
+        if (mCallback != null) {
+            mCallback.onDownloadComplete(doInBackground(s), mDownloadStatus);
+        }
+
+        Log.d(TAG, "runInSameThread: ends");
     }
 
     @Override
@@ -103,4 +113,5 @@ public class GetRawDataAsyncTask extends AsyncTask<String, Void, String> {
         mDownloadStatus = DownloadStatus.FAILED_OR_EMPTY;
         return null;
     }
+
 }
