@@ -1,10 +1,13 @@
 package me.virco.flickbrowser;
 
+import java.io.Serializable;
+
 /**
  * Created by marco on 5/16/2017.
  */
 
-class Photo {
+class Photo implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String mTitle;
     private String mAuthor;
     private String mAuthorId;
